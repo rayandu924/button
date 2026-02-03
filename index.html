@@ -99,6 +99,84 @@
   </div>
 
   <script>
+    // ==========================================================================
+    // APP PRESETS - Protocols, icons and labels for popular applications
+    // ==========================================================================
+    const APP_PRESETS = {
+      spotify: {
+        protocol: 'spotify://',
+        emoji: '🎵',
+        label: 'Spotify',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg'
+      },
+      discord: {
+        protocol: 'discord://',
+        emoji: '💬',
+        label: 'Discord',
+        icon: 'https://assets-global.website-files.com/6257adef93867e50d84d30e2/6257d23c5fb25be7e0b6e220_Open%20Source%20Projects%20702702b9ac54dd3a999140.svg'
+      },
+      vscode: {
+        protocol: 'vscode://',
+        emoji: '💻',
+        label: 'VS Code',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg'
+      },
+      slack: {
+        protocol: 'slack://',
+        emoji: '📢',
+        label: 'Slack',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg'
+      },
+      telegram: {
+        protocol: 'tg://',
+        emoji: '✈️',
+        label: 'Telegram',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg'
+      },
+      steam: {
+        protocol: 'steam://',
+        emoji: '🎮',
+        label: 'Steam',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg'
+      },
+      obs: {
+        protocol: 'obsproject://',
+        emoji: '🎥',
+        label: 'OBS Studio',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Open_Broadcaster_Software_Logo.png'
+      },
+      figma: {
+        protocol: 'figma://',
+        emoji: '🎨',
+        label: 'Figma',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg'
+      },
+      notion: {
+        protocol: 'notion://',
+        emoji: '📝',
+        label: 'Notion',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png'
+      },
+      chrome: {
+        protocol: 'googlechrome://',
+        emoji: '🌐',
+        label: 'Chrome',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg'
+      },
+      firefox: {
+        protocol: 'firefox://',
+        emoji: '🦊',
+        label: 'Firefox',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Firefox_logo%2C_2019.svg'
+      },
+      terminal: {
+        protocol: 'x-terminal-emulator://',
+        emoji: '⬛',
+        label: 'Terminal',
+        icon: null
+      }
+    };
+
     class ShortcutTile {
       constructor() {
         this.tile = document.getElementById('tile');
@@ -106,21 +184,31 @@
         this.iconEmoji = document.getElementById('icon-emoji');
         this.labelEl = document.getElementById('label');
         this.isFirstRender = true;
+        this.fileBlobUrl = null;
 
         const config = window.MyWallpaper?.config || {};
 
         this.settings = {
-          actionType: config.actionType ?? 'url',
-          targetPath: config.targetPath ?? 'https://github.com',
-          iconSource: config.iconSource ?? 'emoji',
+          // Action settings
+          actionMode: config.actionMode ?? 'preset',
+          appPreset: config.appPreset ?? 'spotify',
+          targetUrl: config.targetUrl ?? 'https://github.com',
+          targetFile: config.targetFile ?? null,
+          targetFolder: config.targetFolder ?? '',
+          targetProtocol: config.targetProtocol ?? '',
+          // Icon settings
+          iconSource: config.iconSource ?? 'auto',
           iconEmoji: config.iconEmoji ?? '🚀',
           iconUrl: config.iconUrl ?? '',
           iconFile: config.iconFile ?? null,
           iconSize: config.iconSize ?? 48,
+          // Label settings
           showLabel: config.showLabel ?? true,
-          label: config.label ?? 'GitHub',
+          labelMode: config.labelMode ?? 'auto',
+          labelCustom: config.labelCustom ?? '',
           labelSize: config.labelSize ?? 14,
           labelColor: config.labelColor ?? '#ffffff',
+          // Tile settings
           tileColor: config.tileColor ?? '#ffffff',
           tileOpacity: config.tileOpacity ?? 10,
           blurAmount: config.blurAmount ?? 12,
@@ -128,6 +216,7 @@
           borderWidth: config.borderWidth ?? 1,
           borderColor: config.borderColor ?? '#ffffff',
           borderOpacity: config.borderOpacity ?? 20,
+          // Effects
           enableGlow: config.enableGlow ?? true,
           glowColor: config.glowColor ?? '#8b5cf6',
           glowIntensity: config.glowIntensity ?? 10,
@@ -155,25 +244,93 @@
         return `rgba(${r}, ${g}, ${b}, ${alpha})`;
       }
 
-      applySettings() {
+      // Get the current preset data (if in preset mode)
+      getCurrentPreset() {
+        if (this.settings.actionMode === 'preset') {
+          return APP_PRESETS[this.settings.appPreset] || null;
+        }
+        return null;
+      }
+
+      // Get the target path based on action mode
+      getTargetPath() {
         const s = this.settings;
+        switch (s.actionMode) {
+          case 'preset':
+            const preset = APP_PRESETS[s.appPreset];
+            return preset ? preset.protocol : '';
+          case 'url':
+            return s.targetUrl;
+          case 'file':
+            return this.fileBlobUrl || s.targetFile;
+          case 'folder':
+            return s.targetFolder;
+          case 'custom':
+            return s.targetProtocol;
+          default:
+            return '';
+        }
+      }
+
+      // Get the action type for system.openPath
+      getActionType() {
+        const s = this.settings;
+        switch (s.actionMode) {
+          case 'preset':
+          case 'custom':
+            return 'protocol';
+          case 'url':
+            return 'url';
+          case 'file':
+            return 'file';
+          case 'folder':
+            return 'folder';
+          default:
+            return 'auto';
+        }
+      }
+
+      // Determine icon to display
+      applyIcon() {
+        const s = this.settings;
+        const preset = this.getCurrentPreset();
+
+        this.iconImg.style.display = 'none';
+        this.iconEmoji.style.display = 'none';
 
         // Icon size
         this.tile.style.setProperty('--icon-size', `${s.iconSize}px`);
 
-        // Apply icon based on source
-        this.iconImg.style.display = 'none';
-        this.iconEmoji.style.display = 'none';
+        // Determine icon source
+        let source = s.iconSource;
+        if (source === 'auto' && preset) {
+          // Auto mode with preset: use preset icon or emoji
+          if (preset.icon) {
+            this.iconImg.src = preset.icon;
+            this.iconImg.style.display = 'block';
+            return;
+          } else {
+            this.iconEmoji.textContent = preset.emoji;
+            this.iconEmoji.style.display = 'block';
+            return;
+          }
+        }
 
-        switch (s.iconSource) {
+        // Manual icon selection
+        switch (source) {
+          case 'auto':
           case 'emoji':
-            this.iconEmoji.textContent = s.iconEmoji || '🚀';
+            const emoji = (source === 'auto' && preset) ? preset.emoji : s.iconEmoji;
+            this.iconEmoji.textContent = emoji || '🚀';
             this.iconEmoji.style.display = 'block';
             break;
           case 'url':
             if (s.iconUrl) {
               this.iconImg.src = s.iconUrl;
               this.iconImg.style.display = 'block';
+            } else {
+              this.iconEmoji.textContent = '🚀';
+              this.iconEmoji.style.display = 'block';
             }
             break;
           case 'file':
@@ -185,15 +342,56 @@
                   this.iconEmoji.style.display = 'none';
                 }
               });
+            } else {
+              this.iconEmoji.textContent = '🚀';
+              this.iconEmoji.style.display = 'block';
             }
             break;
         }
+      }
 
-        // Label
+      // Determine label to display
+      applyLabel() {
+        const s = this.settings;
+        const preset = this.getCurrentPreset();
+
         this.labelEl.style.display = s.showLabel ? 'block' : 'none';
-        this.labelEl.textContent = s.label || '';
         this.labelEl.style.fontSize = `${s.labelSize}px`;
         this.labelEl.style.color = s.labelColor;
+
+        // Determine label text
+        let labelText = '';
+        if (s.labelMode === 'auto') {
+          if (preset) {
+            labelText = preset.label;
+          } else if (s.actionMode === 'url') {
+            try {
+              labelText = new URL(s.targetUrl).hostname;
+            } catch {
+              labelText = 'URL';
+            }
+          } else if (s.actionMode === 'file') {
+            labelText = 'Fichier';
+          } else if (s.actionMode === 'folder') {
+            labelText = 'Dossier';
+          } else {
+            labelText = 'Raccourci';
+          }
+        } else {
+          labelText = s.labelCustom || 'Raccourci';
+        }
+
+        this.labelEl.textContent = labelText;
+      }
+
+      applySettings() {
+        const s = this.settings;
+
+        // Apply icon
+        this.applyIcon();
+
+        // Apply label
+        this.applyLabel();
 
         // Tile background (glassmorphism)
         this.tile.style.background = this.hexToRgba(s.tileColor, s.tileOpacity / 100);
@@ -218,13 +416,35 @@
         // Hover/click scale
         this.tile.style.setProperty('--hover-scale', s.hoverScale);
         this.tile.style.setProperty('--click-scale', s.clickScale);
+
+        // Load file if needed
+        if (s.actionMode === 'file' && s.targetFile) {
+          this.loadTargetFile();
+        }
+      }
+
+      async loadTargetFile() {
+        const s = this.settings;
+        if (s.targetFile && window.MyWallpaper?.files?.isFileReference(s.targetFile)) {
+          try {
+            const result = await window.MyWallpaper.files.request('targetFile');
+            if (result.granted && result.blobUrl) {
+              this.fileBlobUrl = result.blobUrl;
+            }
+          } catch (err) {
+            console.error('[ShortcutTile] Failed to load file:', err);
+          }
+        }
       }
 
       async handleClick() {
-        const { actionType, targetPath } = this.settings;
+        const targetPath = this.getTargetPath();
+        const actionType = this.getActionType();
 
         if (!targetPath) {
-          console.warn('[ShortcutTile] No target path configured');
+          console.warn('[ShortcutTile] No target configured');
+          this.tile.classList.add('error');
+          setTimeout(() => this.tile.classList.remove('error'), 2000);
           return;
         }
 
@@ -232,20 +452,22 @@
         this.tile.classList.add('clicked');
         setTimeout(() => this.tile.classList.remove('clicked'), 300);
 
+        console.log('[ShortcutTile] Opening:', targetPath, 'as', actionType);
+
         try {
-          if (window.MyWallpaper?.system?.openPath) {
-            const result = await window.MyWallpaper.system.openPath(targetPath, {
-              type: actionType || 'auto'
-            });
-            if (result.success) {
-              console.log('[ShortcutTile] Opened:', targetPath);
-            }
-          } else {
-            // Fallback for testing without SDK
-            console.log('[ShortcutTile] Would open:', targetPath, 'as', actionType);
-            if (actionType === 'url' || actionType === 'protocol') {
-              window.open(targetPath, '_blank');
-            }
+          if (!window.MyWallpaper?.system?.openPath) {
+            console.error('[ShortcutTile] SDK system.openPath not available');
+            this.tile.classList.add('error');
+            setTimeout(() => this.tile.classList.remove('error'), 2000);
+            return;
+          }
+
+          const result = await window.MyWallpaper.system.openPath(targetPath, {
+            type: actionType
+          });
+
+          if (result.success) {
+            console.log('[ShortcutTile] Opened successfully');
           }
         } catch (err) {
           console.error('[ShortcutTile] Error:', err.message);
