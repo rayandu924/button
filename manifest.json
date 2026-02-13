@@ -1,19 +1,24 @@
 {
   "name": "Shortcut Tile",
-  "version": "1.1.1",
-  "sdkVersion": "2.17.0",
+  "version": "1.2.0",
+  "sdkVersion": "2.1",
+  "renderMode": "native",
+  "entry": "index.js",
   "description": "Customizable glassmorphism tile shortcut to open URLs, files, folders, or applications with beautiful hover effects.",
   "author": "MyWallpaper Community",
   "type": "widget",
-  "categories": ["utilities", "productivity"],
+  "categories": [
+    "utilities",
+    "productivity"
+  ],
   "license": "MIT",
   "repository": "https://github.com/rayandu924/mywallpaper-shortcut-tile",
-
   "capabilities": {
     "hotReload": true,
-    "systemEvents": ["viewport:resize"]
+    "systemEvents": [
+      "viewport:resize"
+    ]
   },
-
   "permissions": {
     "system": {
       "openPath": true
@@ -22,7 +27,6 @@
       "reason": "To launch local applications and files"
     }
   },
-
   "defaultLayout": {
     "xPercent": 50,
     "yPercent": 50,
@@ -30,54 +34,104 @@
     "heightPercent": 15,
     "rotation": 0
   },
-
   "settings": {
     "actionSection": {
       "type": "section",
-      "label": "🎯 Action"
+      "label": "\ud83c\udfaf Action"
     },
     "actionMode": {
       "type": "select",
       "label": "Mode",
       "default": "preset",
       "options": [
-        { "value": "preset", "label": "Application (preset)" },
-        { "value": "url", "label": "URL personnalisée" },
-        { "value": "file", "label": "Fichier local" },
-        { "value": "folder", "label": "Dossier local" },
-        { "value": "custom", "label": "Protocole personnalisé" }
+        {
+          "value": "preset",
+          "label": "Application (preset)"
+        },
+        {
+          "value": "url",
+          "label": "URL personnalis\u00e9e"
+        },
+        {
+          "value": "file",
+          "label": "Fichier local"
+        },
+        {
+          "value": "folder",
+          "label": "Dossier local"
+        },
+        {
+          "value": "custom",
+          "label": "Protocole personnalis\u00e9"
+        }
       ]
     },
     "appPreset": {
       "type": "select",
       "label": "Application",
-      "description": "Choisissez une application à lancer",
+      "description": "Choisissez une application \u00e0 lancer",
       "default": "spotify",
       "options": [
-        { "value": "spotify", "label": "🎵 Spotify" },
-        { "value": "discord", "label": "💬 Discord" },
-        { "value": "vscode", "label": "💻 VS Code" },
-        { "value": "slack", "label": "📢 Slack" },
-        { "value": "telegram", "label": "✈️ Telegram" },
-        { "value": "steam", "label": "🎮 Steam" },
-        { "value": "obs", "label": "🎥 OBS Studio" },
-        { "value": "figma", "label": "🎨 Figma" },
-        { "value": "notion", "label": "📝 Notion" },
-        { "value": "chrome", "label": "🌐 Google Chrome" },
-        { "value": "firefox", "label": "🦊 Firefox" },
-        { "value": "terminal", "label": "⬛ Terminal" }
+        {
+          "value": "spotify",
+          "label": "\ud83c\udfb5 Spotify"
+        },
+        {
+          "value": "discord",
+          "label": "\ud83d\udcac Discord"
+        },
+        {
+          "value": "vscode",
+          "label": "\ud83d\udcbb VS Code"
+        },
+        {
+          "value": "slack",
+          "label": "\ud83d\udce2 Slack"
+        },
+        {
+          "value": "telegram",
+          "label": "\u2708\ufe0f Telegram"
+        },
+        {
+          "value": "steam",
+          "label": "\ud83c\udfae Steam"
+        },
+        {
+          "value": "obs",
+          "label": "\ud83c\udfa5 OBS Studio"
+        },
+        {
+          "value": "figma",
+          "label": "\ud83c\udfa8 Figma"
+        },
+        {
+          "value": "notion",
+          "label": "\ud83d\udcdd Notion"
+        },
+        {
+          "value": "chrome",
+          "label": "\ud83c\udf10 Google Chrome"
+        },
+        {
+          "value": "firefox",
+          "label": "\ud83e\udd8a Firefox"
+        },
+        {
+          "value": "terminal",
+          "label": "\u2b1b Terminal"
+        }
       ]
     },
     "targetUrl": {
       "type": "string",
       "label": "URL",
-      "description": "Adresse web à ouvrir",
+      "description": "Adresse web \u00e0 ouvrir",
       "default": "https://github.com"
     },
     "targetFile": {
       "type": "file",
-      "label": "Fichier à ouvrir",
-      "description": "Sélectionnez un fichier ou exécutable"
+      "label": "Fichier \u00e0 ouvrir",
+      "description": "S\u00e9lectionnez un fichier ou ex\u00e9cutable"
     },
     "targetFolder": {
       "type": "string",
@@ -87,53 +141,63 @@
     },
     "targetProtocol": {
       "type": "string",
-      "label": "Protocole personnalisé",
+      "label": "Protocole personnalis\u00e9",
       "description": "Ex: myapp://open",
       "default": ""
     },
-
     "iconSection": {
       "type": "section",
-      "label": "🖼️ Icon"
+      "label": "\ud83d\uddbc\ufe0f Icon"
     },
     "iconSource": {
       "type": "select",
-      "label": "Source de l'icône",
+      "label": "Source de l'ic\u00f4ne",
       "default": "auto",
       "options": [
-        { "value": "auto", "label": "Automatique (selon l'app)" },
-        { "value": "emoji", "label": "Emoji personnalisé" },
-        { "value": "url", "label": "URL d'image" },
-        { "value": "file", "label": "Fichier local" }
+        {
+          "value": "auto",
+          "label": "Automatique (selon l'app)"
+        },
+        {
+          "value": "emoji",
+          "label": "Emoji personnalis\u00e9"
+        },
+        {
+          "value": "url",
+          "label": "URL d'image"
+        },
+        {
+          "value": "file",
+          "label": "Fichier local"
+        }
       ]
     },
     "iconEmoji": {
       "type": "string",
       "label": "Emoji",
-      "default": "🚀"
+      "default": "\ud83d\ude80"
     },
     "iconUrl": {
       "type": "string",
-      "label": "URL de l'icône",
+      "label": "URL de l'ic\u00f4ne",
       "description": "URL vers une image (PNG, JPG, GIF, SVG)",
       "default": ""
     },
     "iconFile": {
       "type": "image",
-      "label": "Fichier icône"
+      "label": "Fichier ic\u00f4ne"
     },
     "iconSize": {
       "type": "range",
-      "label": "Taille de l'icône",
+      "label": "Taille de l'ic\u00f4ne",
       "min": 24,
       "max": 128,
       "step": 4,
       "default": 48
     },
-
     "labelSection": {
       "type": "section",
-      "label": "📝 Label"
+      "label": "\ud83d\udcdd Label"
     },
     "showLabel": {
       "type": "boolean",
@@ -145,13 +209,19 @@
       "label": "Texte du label",
       "default": "auto",
       "options": [
-        { "value": "auto", "label": "Automatique (nom de l'app)" },
-        { "value": "custom", "label": "Personnalisé" }
+        {
+          "value": "auto",
+          "label": "Automatique (nom de l'app)"
+        },
+        {
+          "value": "custom",
+          "label": "Personnalis\u00e9"
+        }
       ]
     },
     "labelCustom": {
       "type": "string",
-      "label": "Label personnalisé",
+      "label": "Label personnalis\u00e9",
       "default": ""
     },
     "labelSize": {
@@ -167,10 +237,9 @@
       "label": "Couleur du texte",
       "default": "#ffffff"
     },
-
     "tileSection": {
       "type": "section",
-      "label": "🎨 Apparence"
+      "label": "\ud83c\udfa8 Apparence"
     },
     "tileColor": {
       "type": "color",
@@ -179,7 +248,7 @@
     },
     "tileOpacity": {
       "type": "range",
-      "label": "Opacité du fond",
+      "label": "Opacit\u00e9 du fond",
       "min": 0,
       "max": 100,
       "step": 5,
@@ -203,7 +272,7 @@
     },
     "borderWidth": {
       "type": "range",
-      "label": "Épaisseur bordure",
+      "label": "\u00c9paisseur bordure",
       "min": 0,
       "max": 4,
       "step": 0.5,
@@ -216,16 +285,15 @@
     },
     "borderOpacity": {
       "type": "range",
-      "label": "Opacité bordure",
+      "label": "Opacit\u00e9 bordure",
       "min": 0,
       "max": 100,
       "step": 5,
       "default": 20
     },
-
     "effectsSection": {
       "type": "section",
-      "label": "✨ Effets"
+      "label": "\u2728 Effets"
     },
     "enableGlow": {
       "type": "boolean",
@@ -239,7 +307,7 @@
     },
     "glowIntensity": {
       "type": "range",
-      "label": "Intensité du glow",
+      "label": "Intensit\u00e9 du glow",
       "min": 0,
       "max": 30,
       "step": 1,
