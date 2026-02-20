@@ -1,5 +1,5 @@
 {
-  "name": "Shortcuts",
+  "name": "Button",
   "version": "2.0.0",
   "renderMode": "native",
   "entry": "index.js",
@@ -11,7 +11,7 @@
     "productivity"
   ],
   "license": "MIT",
-  "repository": "https://github.com/rayandu924/mywallpaper-shortcut-tile",
+  "repository": "https://github.com/rayandu924/button",
   "capabilities": {
     "hotReload": true,
     "systemEvents": [

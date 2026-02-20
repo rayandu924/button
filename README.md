@@ -1,4 +1,4 @@
-# Shortcut Tile
+# Button
 
 A customizable glassmorphism tile shortcut widget for MyWallpaper. Open URLs, files, folders, or application protocols with a single click.
 
