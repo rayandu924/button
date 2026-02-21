@@ -135,8 +135,8 @@
     "size": {
       "type": "range",
       "label": "Icon size",
-      "min": 32,
-      "max": 96,
+      "min": 16,
+      "max": 512,
       "step": 4,
       "default": 48
     },
@@ -160,7 +160,7 @@
     "glowColor": {
       "type": "color",
       "label": "Glow color",
-      "default": "#8b5cf6",
+      "default": "#ffffff",
       "showIf": { "setting": "enableGlow", "equals": true }
     },
     "glowIntensity": {

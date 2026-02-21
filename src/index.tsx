@@ -57,7 +57,7 @@ export default function Button() {
   const size = settings.size ?? 48
   const hoverScale = (settings.hoverScale ?? 108) / 100
   const enableGlow = settings.enableGlow ?? true
-  const glowColor = settings.glowColor ?? '#8b5cf6'
+  const glowColor = settings.glowColor ?? '#ffffff'
   const glowIntensity = settings.glowIntensity ?? 10
   const gifPlayOnHover = settings.gifPlayOnHover ?? false
 
@@ -147,7 +147,7 @@ export default function Button() {
       src={displaySrc}
       alt=""
       draggable={false}
-      style={{ maxWidth: size, maxHeight: size, borderRadius: borderRadius, display: 'block' }}
+      style={{ width: size, height: 'auto', borderRadius: borderRadius, display: 'block' }}
     />
   ) : (
     <span style={{ fontSize: size * 0.7, lineHeight: 1 }}>
