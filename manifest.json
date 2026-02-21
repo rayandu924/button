@@ -1,6 +1,6 @@
 {
   "name": "Button",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "renderMode": "native",
   "entry": "index.js",
   "description": "A single button widget. Configure it from the sidebar to launch any app, file, URL, or folder.",
