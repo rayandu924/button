@@ -1,9 +1,9 @@
 {
   "name": "Button",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "renderMode": "native",
   "entry": "index.js",
-  "description": "Desktop-style shortcut icons grid. Add, arrange, and launch your apps, files, URLs, and folders with one click.",
+  "description": "A single button widget. Configure it from the sidebar to launch any app, file, URL, or folder.",
   "author": "MyWallpaper Community",
   "type": "widget",
   "categories": [
@@ -13,46 +13,126 @@
   "license": "MIT",
   "repository": "https://github.com/rayandu924/button",
   "capabilities": {
-    "hotReload": true,
-    "systemEvents": [
-      "viewport:resize"
-    ]
+    "hotReload": true
   },
   "permissions": {
     "system": {
       "openPath": true
     },
     "fileAccess": {
-      "reason": "To launch local applications and display icon images"
+      "reason": "To launch local applications and display uploaded icon images"
     }
   },
   "defaultLayout": {
-    "xPercent": 0,
-    "yPercent": 0,
-    "widthPercent": 100,
-    "heightPercent": 100,
+    "xPercent": 45,
+    "yPercent": 45,
+    "widthPercent": 10,
+    "heightPercent": 10,
     "rotation": 0
   },
   "settings": {
-    "actionsSection": {
+    "buttonSection": {
       "type": "section",
-      "label": "\u2699\ufe0f Actions"
+      "label": "Button"
     },
-    "addShortcut": {
-      "type": "button",
-      "label": "Add Shortcut",
-      "buttonLabel": "\u2795 Add Shortcut"
+    "label": {
+      "type": "string",
+      "label": "Label",
+      "default": "My Button"
     },
-    "importDesktopIcons": {
-      "type": "button",
-      "label": "Import Desktop Icons",
-      "buttonLabel": "\ud83d\udcbb Import Desktop Shortcuts"
+    "actionType": {
+      "type": "select",
+      "label": "Action type",
+      "default": "url",
+      "options": [
+        { "label": "URL", "value": "url" },
+        { "label": "File", "value": "file" },
+        { "label": "Folder", "value": "folder" },
+        { "label": "Protocol", "value": "protocol" }
+      ]
+    },
+    "execUrl": {
+      "type": "string",
+      "label": "URL",
+      "default": "",
+      "placeholder": "https://google.com",
+      "showIf": { "setting": "actionType", "equals": "url" }
+    },
+    "execFile": {
+      "type": "string",
+      "label": "File path",
+      "default": "",
+      "placeholder": "/path/to/app.exe",
+      "showIf": { "setting": "actionType", "equals": "file" }
+    },
+    "execFolder": {
+      "type": "string",
+      "label": "Folder path",
+      "default": "",
+      "placeholder": "/home/user/Documents",
+      "showIf": { "setting": "actionType", "equals": "folder" }
+    },
+    "execProtocol": {
+      "type": "string",
+      "label": "Protocol URI",
+      "default": "",
+      "placeholder": "spotify:// or steam://run/730",
+      "showIf": { "setting": "actionType", "equals": "protocol" }
+    },
+    "iconSection": {
+      "type": "section",
+      "label": "Icon"
+    },
+    "iconSourceType": {
+      "type": "select",
+      "label": "Icon source",
+      "default": "emoji",
+      "options": [
+        { "label": "Emoji", "value": "emoji" },
+        { "label": "Image URL", "value": "url" },
+        { "label": "Upload Image", "value": "upload" }
+      ]
+    },
+    "iconEmoji": {
+      "type": "string",
+      "label": "Emoji",
+      "default": "\ud83d\ude80",
+      "showIf": { "setting": "iconSourceType", "equals": "emoji" }
+    },
+    "iconUrl": {
+      "type": "string",
+      "label": "Image URL",
+      "default": "",
+      "showIf": { "setting": "iconSourceType", "equals": "url" }
+    },
+    "iconImage": {
+      "type": "image",
+      "label": "Upload Icon",
+      "showIf": { "setting": "iconSourceType", "equals": "upload" }
+    },
+    "borderRadiusUrl": {
+      "type": "range",
+      "label": "Border radius",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "default": 8,
+      "showIf": { "setting": "iconSourceType", "equals": "url" }
+    },
+    "borderRadiusUpload": {
+      "type": "range",
+      "label": "Border radius",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "default": 8,
+      "showIf": { "setting": "iconSourceType", "equals": "upload" }
     },
     "appearanceSection": {
       "type": "section",
-      "label": "\ud83c\udfa8 Appearance"
+      "label": "Appearance"
     },
-    "iconSize": {
+    "size": {
       "type": "range",
       "label": "Icon size",
       "min": 32,
@@ -60,41 +140,42 @@
       "step": 4,
       "default": 48
     },
-    "gridSpacing": {
-      "type": "range",
-      "label": "Grid spacing",
-      "min": 60,
-      "max": 160,
-      "step": 5,
-      "default": 90
+    "hoverSection": {
+      "type": "section",
+      "label": "Hover Animation"
     },
-    "showLabels": {
-      "type": "boolean",
-      "label": "Show labels",
-      "default": true
-    },
-    "labelSize": {
+    "hoverScale": {
       "type": "range",
-      "label": "Label size",
-      "min": 9,
-      "max": 16,
+      "label": "Zoom scale",
+      "min": 100,
+      "max": 150,
       "step": 1,
-      "default": 11
-    },
-    "labelColor": {
-      "type": "color",
-      "label": "Label color",
-      "default": "#ffffff"
+      "default": 108
     },
     "enableGlow": {
       "type": "boolean",
-      "label": "Icon hover glow",
+      "label": "Enable glow",
       "default": true
     },
     "glowColor": {
       "type": "color",
       "label": "Glow color",
-      "default": "#8b5cf6"
+      "default": "#8b5cf6",
+      "showIf": { "setting": "enableGlow", "equals": true }
+    },
+    "glowIntensity": {
+      "type": "range",
+      "label": "Glow intensity",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "default": 10,
+      "showIf": { "setting": "enableGlow", "equals": true }
+    },
+    "gifPlayOnHover": {
+      "type": "boolean",
+      "label": "Play GIF only on hover",
+      "default": false
     }
   }
 }
